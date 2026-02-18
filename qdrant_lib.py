@@ -16,8 +16,11 @@ import os
 import logging
 from dotenv import load_dotenv
 from typing import  Optional
-from qdrant_client import QdrantClient
+from qdrant_client import QdrantClient, models
 from qdrant_client.models import VectorParams, Distance
+# from fastembed import TextEmbedding
+# from typing import List
+# import numpy as np
 
 
 logging.basicConfig(
@@ -64,13 +67,16 @@ class Qdrant_Client:
             bool: Resultado de creación.
         """
         try:
+            self.model_name = "BAAI/bge-small-en"
+            
+
             if not self.qdrantClient.collection_exists(collection_name):
                 self.qdrantClient.create_collection(
-                collection_name= collection_name,
-                vectors_config=VectorParams(
-                    size=self.collection_size, 
-                    distance= self.distance
-                ),
+                collection_name="test_collection",
+                vectors_config=models.VectorParams(
+                    size= 4, 
+                    distance=models.Distance.COSINE
+                )   
             )
                 logger.debug(f"Creada la colección {collection_name}")
                 return True
@@ -89,5 +95,13 @@ class Qdrant_Client:
             logger.error(f"No puede eliminarse la colección: {collection_name}")
         return result
     
-    def add_to_collection(self, collection_name: str, content: str, metadata: Optional[dict]):
-        pass
+    def add_to_collection(self, collection_name: str, docs: list[str], metadata: Optional[dict]= None, ids: Optional[list[str]]= None):
+
+        something = self.qdrantClient.add(
+            collection_name= collection_name,
+            documents= docs,
+            metadata= metadata,
+            ids=ids
+        )
+
+        logger.info(f"addiccion: {something}")

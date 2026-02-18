@@ -42,3 +42,10 @@ De inferencia simple: ¿Para qué servirá la alianza entre Aetheris Dynamics y 
 Negativa (Prueba de Alucinación): ¿Cuál es el nombre del director de marketing de la empresa? (El texto no lo menciona, el modelo debería decir que no lo sabe). 
 """
 
+client.create_collection("Pruebas")
+docs = [
+    "Qdrant has a LangChain integration for chatbots.",
+    "Qdrant has a LlamaIndex integration for agents.",
+]
+
+client.add_to_collection("Pruebas", docs= docs)
