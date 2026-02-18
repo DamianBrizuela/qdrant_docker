@@ -31,7 +31,7 @@ logger.setLevel(logging.DEBUG)
 # Cargar variables del .env
 load_dotenv()
 
-class QdrantClient:
+class Qdrant_Client:
 
     def __init__(self):
 
@@ -63,7 +63,14 @@ class QdrantClient:
                     distance= self.distance
                 ),
             )
+                logger.debug(f"Creada la colección {collection_name}")
+                return True
+            else:
+                logger.error(f"Ya existe una colleción de nombre {collection_name}")
+                return False
+            
         except Exception as e:
-
+            logger.error("No puede crearse una coleccion.")
+            return False
         
-
+    
