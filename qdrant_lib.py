@@ -15,6 +15,7 @@ Notas:
 import os
 import logging
 from dotenv import load_dotenv
+from typing import  Optional
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance
 
@@ -54,6 +55,14 @@ class Qdrant_Client:
         )
         
     def create_collection(self, collection_name: str) -> bool:
+        """Crea una colección con el nombre indicado
+
+        Args:
+            collection_name (str): Nombre de colección
+
+        Returns:
+            bool: Resultado de creación.
+        """
         try:
             if not self.qdrantClient.collection_exists(collection_name):
                 self.qdrantClient.create_collection(
@@ -72,5 +81,13 @@ class Qdrant_Client:
         except Exception as e:
             logger.error("No puede crearse una coleccion.")
             return False
-        
+
+    def delete_collection(self, collection_name: str) -> bool:
+        """ Remueve una colección creada. """
+        result= self.qdrantClient.delete_collection(collection_name, timeout= 10)
+        if not result:
+            logger.error(f"No puede eliminarse la colección: {collection_name}")
+        return result
     
+    def add_to_collection(self, collection_name: str, content: str, metadata: Optional[dict]):
+        pass
