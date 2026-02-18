@@ -13,7 +13,7 @@ Notas:
 """
 
 import logging
-from qdrant_client import QdrantClient
+from qdrant_lib import Qdrant_Client
 
 logging.basicConfig(
     level=logging.INFO,
@@ -22,3 +22,7 @@ logging.basicConfig(
 
 logger = logging.getLogger("Main -")
 logger.setLevel(logging.INFO)
+
+
+client = Qdrant_Client()
+client.create_collection("Mamerto1")
