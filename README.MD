@@ -1,7 +1,9 @@
 # Uso de Qdrant - RAG simple
 
 ## instalación de entorno
-Para poder usar este repositorio es necesario configurar un entorno virtual y ejecutar el docker de qdrant.
+Para poder usar este repositorio es necesario configurar un entorno virtual y ejecutar el docker de qdrant. <br>
+
+**El código se proporciona tal cual, sin responsabilidad por su uso o ejecución por parte del autor<br>Qdrant, LangChain, y demas librerias son propiedad de sus respectivos dueños.**
 ### docker:
 Con el repositorio descargado, ejecuta: <br>
 
