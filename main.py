@@ -23,8 +23,34 @@ logging.basicConfig(
 logger = logging.getLogger("Main -")
 logger.setLevel(logging.INFO)
 
+collection_name = "test2"
 
-client = Qdrant_Client()
+try:
+    client = Qdrant_Client()
+    if client.create_collection(collection_name):
+        print('*'*20)
+        logger.info("Colección creada")
+        print('*'*20)
+
+    docs = [
+        "Qdrant has a LangChain integration for chatbots.",
+        "Qdrant has a LlamaIndex integration for agents.",
+    ]
+
+    print('*-'*20)
+    client.add_to_collection(collection_name, docs[0])
+    client.add_to_collection(
+        collection_name, 
+        docs[1],
+        {
+            "filename": "Integration",
+            "url": "https://langchain/fastembed/hugging-face"
+        }
+    )
+    # dimension = client.get_dimension(collection_name)
+
+except Exception as e:
+    logger.error(f"Error: {e}")
 
 # texto a embeber
 texto = """
@@ -42,10 +68,3 @@ De inferencia simple: ¿Para qué servirá la alianza entre Aetheris Dynamics y 
 Negativa (Prueba de Alucinación): ¿Cuál es el nombre del director de marketing de la empresa? (El texto no lo menciona, el modelo debería decir que no lo sabe). 
 """
 
-client.create_collection("Pruebas")
-docs = [
-    "Qdrant has a LangChain integration for chatbots.",
-    "Qdrant has a LlamaIndex integration for agents.",
-]
-
-client.add_to_collection("Pruebas", docs= docs)
