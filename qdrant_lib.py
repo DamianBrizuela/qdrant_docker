@@ -36,6 +36,7 @@ load_dotenv()
 class Qdrant_Client:
 
     def __init__(self):
+        """Instancia el cliente qdrant """
 
         try:
             self.host = os.getenv('QDRANT_HOST', 'localhost')
@@ -52,7 +53,17 @@ class Qdrant_Client:
             logger.error(f"Error {e}")
 
         
-    def _chunk_text(self, text: str, size: int = 400, overlap: int = 50):
+    def _chunk_text(self, text: str, size: int = 400, overlap: int = 50) -> list:
+        """Fracciona el texto en chunks manejables por qdrant
+
+        Args:
+            text (str): texto a fraccionar
+            size (int, optional): tamaño de los chunks a generar
+            overlap (int, optional): solapamiento de caracteres
+
+        Returns:
+            list: lista de chunks del texto original
+        """
         
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=size,
@@ -99,9 +110,19 @@ class Qdrant_Client:
             logger.error(f"No puede eliminarse la colección: {collection_name}")
         return result
     
-    def add_to_collection(self, collection_name: str, content: str, metadata: dict= {}):
+    def add_to_collection(self, collection_name: str, content: str, metadata: dict= {}) -> dict:
+        """Adiciona a la colección el contenido, y la metadata asociada
+
+        Args:
+            collection_name (str): Nombre de la colección
+            content (str): texto a vectorizar
+            metadata (dict): información adicional asociada a texto de contenido
+
+        Returns:
+            dict: diccionario indicando nombre de archivo asociado, puntos generados, id de la operacion y el estado
+        """
         
-        chunks= self._chunk_text(content, 3, 0)
+        chunks= self._chunk_text(content)
         file_name = metadata.get("filename", str(ULID()))
 
         points = []
@@ -137,11 +158,14 @@ class Qdrant_Client:
             "status": upsert.status.value
         }
         logger.debug(f"{data}")
+        return data
 
     def get_info(self, collection_name: str):
+        """ Recupera información de una colección """
         return self.qdrantClient.get_collection(collection_name= collection_name)
 
     def get_dimension(self, collection_name: str) -> Optional[int]:
+        """recupera la dimension de la colección """
         info = self.get_info(collection_name)
         logger.debug(info.config.params.vectors)
         return info.config.params.vectors.size
