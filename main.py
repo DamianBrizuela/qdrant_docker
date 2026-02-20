@@ -23,7 +23,7 @@ logging.basicConfig(
 logger = logging.getLogger("Main -")
 logger.setLevel(logging.INFO)
 
-collection_name = "test2"
+collection_name = "test"
 
 try:
     client = Qdrant_Client()
@@ -47,7 +47,8 @@ try:
             "url": "https://langchain/fastembed/hugging-face"
         }
     )
-    # dimension = client.get_dimension(collection_name)
+
+    # client.delete_collection(collection_name)
 
 except Exception as e:
     logger.error(f"Error: {e}")

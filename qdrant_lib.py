@@ -108,6 +108,8 @@ class Qdrant_Client:
         result= self.qdrantClient.delete_collection(collection_name, timeout= 10)
         if not result:
             logger.error(f"No puede eliminarse la colección: {collection_name}")
+        else:
+            logger.debug(f"Colección eliminada.")
         return result
     
     def add_to_collection(self, collection_name: str, content: str, metadata: dict= {}) -> dict:
